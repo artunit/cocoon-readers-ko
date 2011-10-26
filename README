@@ -1,0 +1,24 @@
+README – Created: Oct. 2011
+Last Revised: Oct. 2011
+
+Project: Imager reader
+
+This a modification of the Cocoon ImageOp Reader suite, which
+seems to be broken in trunk. A cocoon reader is useful for 
+working with special generators, for example, combing with 
+the zip generator:
+
+[http://app.org/app/]img-foo.jpg-0.5-png
+
+which maps to something like:
+
+<map:match pattern="img-*-*-*">
+   <map:read type="img-op-scale" src="jar:{realpath:/}files.zip!/{1}.jpg">
+      <map:parameter name="scale-scale" value="{2}" />
+      <map:parameter name="output-format" value="{3}" />
+   </map:read>
+</map:match>
+
+This comes in handy for newspaper processing.
+
+art rhyno <projectconifer.ca>
