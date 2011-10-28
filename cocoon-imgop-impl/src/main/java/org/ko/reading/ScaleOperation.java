@@ -35,6 +35,7 @@ public class ScaleOperation
     private String  prefix;
     private boolean enabled;
     private float   scale;
+    private int   align;
 
     public void setPrefix( String prefix ) {
         this.prefix = prefix;
@@ -43,6 +44,7 @@ public class ScaleOperation
     public void setup( Parameters params ) {
         enabled = params.getParameterAsBoolean( prefix + "enabled", true);
         scale = params.getParameterAsFloat( prefix + "scale", 1.0f );
+        align = params.getParameterAsInteger( prefix + "align", 0 );
     }
 
     public BufferedImage apply( BufferedImage image ) {
@@ -50,19 +52,38 @@ public class ScaleOperation
         int newHeight = new Double(image.getHeight() * scale).intValue();
 
         BufferedImage resized = new BufferedImage(newWidth, newHeight, image.getType());
+        BufferedImage sliced = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
 
         Graphics2D g = resized.createGraphics();
+        Graphics2D g2 = sliced.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.drawImage(image, 0, 0, newWidth, newHeight, 0, 0, image.getWidth(), image.getHeight(), null);
-        g.dispose();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            
+        g.drawImage(image, 0, 0, newWidth, newHeight, 0, 0, 
+            image.getWidth(), image.getHeight(), null);
 
-        return resized;
+        if (align == 1) {
+            g2.drawImage(resized, 0, 0, image.getWidth(), image.getHeight(), 0, 0, 
+                Math.round(resized.getWidth()/2), resized.getHeight(), null);
+        } 
+        if (align > 1) {
+            g2.drawImage(resized, 0, 0, image.getWidth(), image.getHeight(), Math.round(resized.getWidth()/align), 
+                0, resized.getWidth(), resized.getHeight(), null);
+        }
+        g.dispose();
+        g2.dispose();
+
+        if (align == 0)
+            return resized;
+
+        return sliced;
     }
 
     public String getKey() {
         return "scale:" 
                + ( enabled ? "enable" : "disable" )
                + ":" + scale
+               + ":" + align
                + ":" + prefix;
     }
 } 

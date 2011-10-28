@@ -8,16 +8,23 @@ seems to be broken in trunk. A cocoon reader is useful for
 working with special generators, for example, combing with 
 the zip generator:
 
-[http://app.org/app/]img-foo.jpg-0.5-png
+[http://app.org/app/]img-foo.jpg-2.0-1-png
 
 which maps to something like:
 
-<map:match pattern="img-*-*-*">
+<map:match pattern="img-*-*-*-*">
    <map:read type="img-op-scale" src="jar:{realpath:/}files.zip!/{1}.jpg">
       <map:parameter name="scale-scale" value="{2}" />
-      <map:parameter name="output-format" value="{3}" />
+      <map:parameter name="scale-align" value="{3}" />
+      <map:parameter name="output-format" value="{4}" />
    </map:read>
 </map:match>
+
+The "scale-align" parameter defines where an image is chopped, where:
+
+0 - passes through the image with the resizing
+1 - passes through the first half of the image
+2 - passes through the second half of the image
 
 This comes in handy for newspaper processing.
 
