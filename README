@@ -20,11 +20,13 @@ which maps to something like:
    </map:read>
 </map:match>
 
-The "scale-align" parameter defines where an image is chopped, where:
+The "scale-align" parameter defines where an image is divided, where:
 
 0 - passes through the image with the resizing
-1 - passes through the first half of the image
-2 - passes through the second half of the image
+1 - passes through the top left quadrant of the image
+2 - passes through the top right quadrant of the image
+3 - passes through the bottom left quadrant of the image
+4 - passes through the bottom right quadrant of the image
 
 This comes in handy for newspaper processing.
 

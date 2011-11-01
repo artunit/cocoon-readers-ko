@@ -52,31 +52,40 @@ public class ScaleOperation
         int newHeight = new Double(image.getHeight() * scale).intValue();
 
         BufferedImage resized = new BufferedImage(newWidth, newHeight, image.getType());
-        BufferedImage sliced = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+        BufferedImage quadrant = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
 
         Graphics2D g = resized.createGraphics();
-        Graphics2D g2 = sliced.createGraphics();
+        Graphics2D g2 = quadrant.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             
         g.drawImage(image, 0, 0, newWidth, newHeight, 0, 0, 
             image.getWidth(), image.getHeight(), null);
 
+        /* An image is divided into 4 quadrants and the align number specifies which corner is presented */
         if (align == 1) {
             g2.drawImage(resized, 0, 0, image.getWidth(), image.getHeight(), 0, 0, 
+                Math.round(resized.getWidth()/2), Math.round(resized.getHeight()/2), null);
+        } 
+        if (align == 2) {
+            g2.drawImage(resized, 0, 0, image.getWidth(), image.getHeight(),  Math.round(resized.getWidth()/2), 0, 
+                resized.getWidth(), Math.round(resized.getHeight()/2), null);
+        } 
+        if (align == 3) {
+            g2.drawImage(resized, 0, 0, image.getWidth(), image.getHeight(),  0, Math.round(resized.getWidth()/2), 
                 Math.round(resized.getWidth()/2), resized.getHeight(), null);
         } 
-        if (align > 1) {
-            g2.drawImage(resized, 0, 0, image.getWidth(), image.getHeight(), Math.round(resized.getWidth()/align), 
-                0, resized.getWidth(), resized.getHeight(), null);
-        }
+        if (align == 4) {
+            g2.drawImage(resized, 0, 0, image.getWidth(), image.getHeight(),  Math.round(resized.getWidth()/2), 
+                Math.round(resized.getHeight()/2), resized.getWidth(), resized.getHeight(), null);
+        } 
         g.dispose();
         g2.dispose();
 
-        if (align == 0)
+        if (align == 0 || align > 4)
             return resized;
 
-        return sliced;
+        return quadrant;
     }
 
     public String getKey() {
