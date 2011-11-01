@@ -5,7 +5,7 @@ Project: Imager reader
 
 This a modification of the Cocoon ImageOp Reader suite, which
 seems to be broken in trunk. A cocoon reader is useful for 
-working with special generators, for example, combing with 
+working with special generators, for example, combining with 
 the zip generator:
 
 [http://app.org/app/]img-foo.jpg-2.0-1-png
